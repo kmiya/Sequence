@@ -58,6 +58,6 @@ void mainLoop() {
   kGame->Draw(); // ‚±‚±‚É“ü‚ê‚È‚¢‚Æ‰æ–Ê•`Ê‚ªˆêè‡’x‚ê‚é
   if (!not_cleared) {
     delete kGame;
-    kGame = 0;
+    kGame = nullptr;
   }
 }
