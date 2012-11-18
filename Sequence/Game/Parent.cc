@@ -50,6 +50,14 @@ Child* Parent::Update(sequence::Parent* parent) {
 void Parent::MoveTo(const kSeq seq) {
   kMoveTo_ = seq;
 }
+void Parent::GameReset() const{
+  kGame_->Reset();
+}
+int Parent::GameUpdate() const {
+  const int not_cleared = kGame_->Update();
+  kGame_->Draw(); // ‚±‚±‚É“ü‚ê‚È‚¢‚Æ‰æ–Ê•`Ê‚ªˆêè‡’x‚ê‚é
+  return not_cleared;
+}
 
 } // namespace game
 } // namespace sequence

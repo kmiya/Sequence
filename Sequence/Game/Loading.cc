@@ -16,7 +16,7 @@ Loading::~Loading() {
 }
 Child* Loading::Update(Parent* parent) {
   Child* next = this;
-  if (kCount_ == 60) {
+  if (kCount_ == 100) {
     next = new Play();
     ASSERT(next);
   }

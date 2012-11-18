@@ -31,6 +31,8 @@ SokoBan::SokoBan(const char *stage, const int &size)
       ++y;
     }
   }
+  // ‰Šúó‘Ô‚ğ•Û‘¶
+  initial_state_ = stage_;
   // ‰æ‘œ“Ç‚İ‚İ
   kImage_ = new image::Image("data/image/nimotsuKunImage2.dds");
   ASSERT(kImage_);
@@ -142,6 +144,9 @@ void SokoBan::Draw() {
       stage_[y][x].DrawForeground(x, y, kImage_, kMoveCount_);
     }
   }
+}
+void SokoBan::Reset() {
+  stage_ = initial_state_;
 }
 void SokoBan::SetSize(const char *stage, const int &size) {
   int x = 0;

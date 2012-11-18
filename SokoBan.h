@@ -19,6 +19,7 @@ public:
   ~SokoBan();
   int Update(); // クリアか中止なら 0 を返す．それ以外は1．
   void Draw();
+  void Reset(); // 初期状態に戻す
 
 private:
   typedef struct { int x; int y; } Position;
@@ -28,7 +29,7 @@ private:
   int ClearOrNot() const;
 
   image::Image *kImage_;
-  std::vector<std::vector<Object>> stage_;
+  std::vector<std::vector<Object>> stage_, initial_state_;
   int kStageWidth_;
   int kStageHeight_;
   int kMoveCount_;

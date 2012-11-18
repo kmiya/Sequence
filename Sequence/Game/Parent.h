@@ -22,12 +22,14 @@ public:
   Parent(const int stage_number);
   ~Parent();
   Child* Update(sequence::Parent* parent);
-  sokoban::SokoBan* kGame_;
   void MoveTo(const kSeq seq);
+  void GameReset() const;
+  int GameUpdate() const;
 
 private:
   kSeq kMoveTo_;
   Child* kChild_;
+  sokoban::SokoBan* kGame_;
 };
 
 } // namespace game

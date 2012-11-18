@@ -63,3 +63,14 @@ void Image::Draw( const int dstX, const int dstY,
     }
   }
 }
+void Image::DrawBlack() const {
+  Framework f    = Framework::instance();
+  unsigned *vram = f.videoMemory();
+  const auto height = f.height();
+  const auto width  = f.width();
+  for (auto y = 0; y < height; ++y) {
+    for (auto x = 0; x < width; ++x) {
+      vram[y * height + x] = 0x00000000;
+    }
+  }
+}

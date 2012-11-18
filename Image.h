@@ -13,6 +13,7 @@ public:
   void Draw( const int dstX, const int dstY, 
              const int srcX, const int srcY,
              const int width, const int height) const;
+  void DrawBlack() const;
 private:
   int kHeight_;
   int kWidth_;
