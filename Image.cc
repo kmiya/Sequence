@@ -57,7 +57,7 @@ void Image::Draw( const int dstX, const int dstY,
         *dst = (r & 0xff0000) | (g & 0x00ff00) | b;
       } else {
         // ”ÍˆÍŠO‘‚«‚İ
-        cout << "[Image.cc] Out of range error! (" << x << "," << y << ")" << endl;
+        //cout << "[Image.cc] Out of range error! (" << x << "," << y << ")" << endl;
         return;
       }
     }
