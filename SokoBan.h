@@ -24,7 +24,7 @@ private:
   typedef struct { int x; int y; } Position;
 
   void SetSize(const char *stage, const int &size);
-  int Move(const Position& from, const Position& move, const Position& next);
+  void Move(const Position& from, const Position& move, const Position& next);
   int ClearOrNot() const;
 
   image::Image *kImage_;

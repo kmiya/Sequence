@@ -1,13 +1,11 @@
 #include "SokoBan.h"
-using namespace std;
-
 #include "GameLib\Framework.h"
-using namespace GameLib;
-
 #include "Image.h"
-
 #include <assert.h>
 #include <fstream>
+
+using namespace std;
+using namespace GameLib;
 
 namespace sokoban {
 
@@ -35,6 +33,7 @@ SokoBan::SokoBan(const char *stage, const int &size)
   }
   // 画像読み込み
   kImage_ = new image::Image("data/image/nimotsuKunImage2.dds");
+  ASSERT(kImage_);
 }
 SokoBan::~SokoBan() {
   delete kImage_;
@@ -51,6 +50,7 @@ int SokoBan::Update() {
         stage_[y][x].kComeFrom_.y = y;
       }
     }
+    return ClearOrNot();
   }
   // 移動中
   if (kMoveCount_ > 0) {
@@ -89,12 +89,13 @@ int SokoBan::Update() {
   } else if (inputZ) {
     move.y += 1; next.y += 2;
   }
-  return Move(from, move, next);
+  Move(from, move, next);
+  return kNotClear_;
 }
-int SokoBan::Move(const Position& from, const Position& move, const Position& next) {
+void SokoBan::Move(const Position& from, const Position& move, const Position& next) {
   // 一つ先がステージの範囲内か確認
   if (move.x < 0 || move.y < 0 || move.x >= kStageWidth_ || move.y >= kStageHeight_) {
-    return kNotClear_;
+    return;
   }
   Object &s_from = stage_[from.y][from.x];
   Object &s_move = stage_[move.y][move.x];
@@ -107,7 +108,7 @@ int SokoBan::Move(const Position& from, const Position& move, const Position& ne
   } else if (s_move.kItem_ == Object::kBox || s_move.kItem_ == Object::kBoxOnGoal) {
     // 二つ先がステージの範囲内か確認
     if (next.x < 0 || next.y < 0 || next.x >= kStageWidth_ || next.y >= kStageHeight_) {
-      return kNotClear_;
+      return;
     }
     Object &s_next = stage_[next.y][next.x];
     if (s_next.kItem_ == Object::kGoal) {          // 二つ先がゴール
@@ -115,19 +116,18 @@ int SokoBan::Move(const Position& from, const Position& move, const Position& ne
     } else if (s_next.kItem_ == Object::kEmpty) {  // 二つ先が空
       s_next.Move(move.x, move.y, Object::kBox);
     } else {
-      return kNotClear_;
+      return;
     }
     (s_move.kItem_ == Object::kBoxOnGoal) ? s_move.Move(from.x, from.y, Object::kPlayerOnGoal)
                                           : s_move.Move(from.x, from.y, Object::kPlayer);
   } else {
-    return kNotClear_;
+    return;
   }
   // 現在プレイヤーはゴールに乗っている？
   (s_from.kItem_ == Object::kPlayerOnGoal) ? s_from.Move(from.x, from.y, Object::kGoal)
                                            : s_from.Move(from.x, from.y, Object::kEmpty);
   // 移動アニメーション開始
   kMoveCount_ = 1;
-  return ClearOrNot();
 }
 void SokoBan::Draw() {
   // 背景を描写
@@ -144,23 +144,23 @@ void SokoBan::Draw() {
   }
 }
 void SokoBan::SetSize(const char *stage, const int &size) {
-	int x = 0;
-	int y = 0;
-	for (int i = 0; i < size; ++i){
-		switch (stage[i]){
-			case '#': case ' ': case 'o': case 'O':
-			case '.': case 'p': case 'P':
-				++x;
-				break;
-			case '\n': 
-				++y;
-				//最大値更新
-				kStageWidth_ = max(kStageWidth_, x);
-				kStageHeight_ = max(kStageHeight_, y);
-				x = 0;
-				break;
-		}
-	}
+  int x = 0;
+  int y = 0;
+  for (int i = 0; i < size; ++i){
+    switch (stage[i]){
+      case '#': case ' ': case 'o': case 'O':
+      case '.': case 'p': case 'P':
+        ++x;
+        break;
+      case '\n': 
+        ++y;
+        //最大値更新
+        kStageWidth_ = max(kStageWidth_, x);
+        kStageHeight_ = max(kStageHeight_, y);
+        x = 0;
+        break;
+    }
+  }
 }
 int SokoBan::ClearOrNot() const {
   for (int y = 0; y < kStageHeight_; ++y) {
@@ -169,7 +169,6 @@ int SokoBan::ClearOrNot() const {
         return kNotClear_;
     }
   }
-  cout << "\nCongratulations!" << endl;
   return 0;
 }
 

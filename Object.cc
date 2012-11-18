@@ -1,9 +1,7 @@
 #include "Object.h"
-
 #include "Image.h"
 
 namespace sokoban {
-
 Object::Object() : kDot_(32) {
   Position kComeFrom_ = {0, 0};
   Item kItem_ = kUnknown;

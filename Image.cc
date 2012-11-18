@@ -6,18 +6,21 @@ using namespace image;
 #include "GameLib\Framework.h"
 using namespace GameLib;
 
-Image::Image(const char* file_name) : kHeight_(0), kWidth_(0), kImage(nullptr) {
+Image::Image(const char* file_name) : kHeight_(0), kWidth_(0), kImage_(nullptr) {
   file::File file(file_name);
   kHeight_ = file.GetUnsigned(12);
   kWidth_  = file.GetUnsigned(16);
-  kImage = new unsigned[kHeight_ * kWidth_];
+  kImage_ = new unsigned[kHeight_ * kWidth_];
   for ( int i = 0; i < kHeight_ * kWidth_; ++i) {
-    kImage[i] = file.GetUnsigned(128 + i * 4);
+    kImage_[i] = file.GetUnsigned(128 + i * 4);
   }
 }
 Image::~Image() {
-  delete[] kImage;
-  kImage = nullptr;
+  delete[] kImage_;
+  kImage_ = nullptr;
+}
+void Image::Draw() const {
+  Draw(0, 0, 0, 0, kWidth_, kHeight_);
 }
 void Image::Draw( const int dstX, const int dstY, 
                   const int srcX, const int srcY,
@@ -40,7 +43,7 @@ void Image::Draw( const int dstX, const int dstY,
       // 画像メモリの範囲外に書き込んでないかチェック
       if (pos >= 0 && pos < maximum_size) {
         unsigned *dst = &vram[pos];
-        const unsigned src = kImage[sourceY + x];
+        const unsigned src = kImage_[sourceY + x];
         const unsigned srcA = (src & 0xff000000) >> 24;
         const unsigned srcR = src & 0x00ff0000;
         const unsigned srcG = src & 0x0000ff00;

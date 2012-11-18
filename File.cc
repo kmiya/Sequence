@@ -1,21 +1,18 @@
 #include <fstream>
-
+#include <assert.h>
 #include "File.h"
 
 using namespace file;
 
 File::File(const char* file_name) : kSize_(0), kData_(nullptr) {
   using namespace std;
-	ifstream in(file_name, ifstream::binary);
-	if (!in) {
-    // cannot open the file
-	} else {
-		in.seekg(0, ifstream::end);
-		kSize_ = static_cast<int>(in.tellg());
-		in.seekg(0, ifstream::beg);
-		kData_ = new char[kSize_];
-		in.read(kData_, kSize_);
-	}
+  ifstream in(file_name, ifstream::binary);
+  assert(in);
+  in.seekg(0, ifstream::end);
+  kSize_ = static_cast<int>(in.tellg());
+  in.seekg(0, ifstream::beg);
+  kData_ = new char[kSize_];
+  in.read(kData_, kSize_);
 }
 File::~File() {
   delete[] kData_;
