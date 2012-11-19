@@ -44,7 +44,6 @@ Child* Parent::Update(sequence::Parent* parent) {
       next = nullptr;
       break;
   }
-  kMoveTo_ = kNone;
   return next;
 }
 void Parent::MoveTo(const kSeq seq) {
